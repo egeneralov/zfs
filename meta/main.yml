@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Eduard Generalov <eduard@generalov.net>
+  description: debian ZFS provision
+  license: MIT
+  min_ansible_version: 2.9.2
+  platforms:
+  - name: Debian
+    versions:
+    - buster
+  galaxy_tags:
+    - zfs
+dependencies: []

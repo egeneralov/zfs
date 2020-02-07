@@ -1,0 +1,36 @@
+---
+# tasks file for egeneralov.zfs
+
+- name: add backports repository
+  apt_repository:
+    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main contrib non-free"
+    state: present
+    filename: backports
+  register: repository
+
+- name: apt-get update
+  apt:
+    update_cache: yes
+  when: repository.changed
+
+- block:
+    - name: install zfs
+      apt:
+        default_release: "{{ ansible_distribution_release }}-backports"
+        update_cache: yes
+        cache_valid_time: 3600
+        name:
+          - dkms
+          - spl-dkms
+          - zfs-dkms
+          - zfsutils-linux
+  rescue:
+    - name: dpkg reconfigure
+      shell: dpkg --configure -a
+      register: dpkg
+      changed_when: dpkg.stdout_lines|length > 1
+
+- name: modprobe zfs
+  modprobe:
+    name: zfs
+    state: present

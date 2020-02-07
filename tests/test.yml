@@ -1,0 +1,6 @@
+---
+
+- hosts: zfs
+  remote_user: root
+  roles:
+    - egeneralov.zfs
